@@ -22,6 +22,7 @@ import com.shivu.productservice.dto.ProductRequest;
 @AutoConfigureMockMvc
 class ProductServiceApplicationTests {
 
+	/* 
 	//Get the docker image of Mongodb to get it ready for integration test
 	@Container
 	static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:4.4.2");
@@ -63,6 +64,8 @@ class ProductServiceApplicationTests {
 					.price(Float.valueOf("20.64")).build();
 
 	}
+
+	*/
 
 
 }

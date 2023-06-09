@@ -1,6 +1,7 @@
 package com.shivu.productservice.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,7 @@ public class ProductService {
     }
 
     public List<ProductResponse> getAllProducts() {
-        return productRepo.findAll().stream().map(this::maptoProductResponse).toList();
+        return productRepo.findAll().stream().map(this::maptoProductResponse).collect(Collectors.toList());
     }
 
     private ProductResponse maptoProductResponse(Product product){

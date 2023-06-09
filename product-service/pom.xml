@@ -7,15 +7,19 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.7.13-SNAPSHOT</version>
+		<!-- <groupId>com.shivu</groupId>
+		<artifactId>e_com_microservice</artifactId>
+		<version>0.0.1-SNAPSHOT</version> -->
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.shivu</groupId>
 	<artifactId>product-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>product-service</name>
+	<packaging>jar</packaging>
 	<description>Product Service in Microservice</description>
 	<properties>
-		<java.version>17</java.version>
+		<java.version>11</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
