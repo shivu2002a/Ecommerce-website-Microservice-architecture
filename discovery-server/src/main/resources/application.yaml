@@ -1,0 +1,9 @@
+eureka:
+    instance.hostname: localhost
+    client:
+        # By default, these will be true
+        register-with-eureka: false
+        fetch-registry: false
+
+#Default value
+server.port: 8761
