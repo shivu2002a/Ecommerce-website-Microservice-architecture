@@ -1,0 +1,12 @@
+spring:
+    output.ansi.enabled : always
+    data:
+        mongodb:
+            uri: mongodb+srv://shivua1945:fN6TcbSCBOFml4D4@microservice.mz6t4i7.mongodb.net/Microservice?retryWrites=true&w=majority
+            database: Microservice
+
+
+server.port: 8081
+
+# Password : fN6TcbSCBOFml4D4
+# Username : shivua1945
