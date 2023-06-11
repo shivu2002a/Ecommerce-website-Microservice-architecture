@@ -1,8 +1,9 @@
-
+# Spring Datasource config
 spring:
+    application.name: inventory-service
     h2.console.enabled: true
     datasource: 
-        url: jdbc:h2:file:./inventory-service-db/db
+        url: jdbc:h2:file:./inventory-service/db
         driverClassName: org.h2.Driver
         username: sa
         password:
@@ -13,3 +14,8 @@ spring:
     output.ansi.enabled: always
 
 server.port: 8083
+
+# Eureka server address 
+eureka:
+    client:
+        serviceUrl.defaultZone: http://localhost:8761/eureka 
