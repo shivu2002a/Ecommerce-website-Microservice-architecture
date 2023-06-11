@@ -25,7 +25,7 @@ public class OrderService {
     OrderRepository orderRepo;
 
     @Autowired
-    WebClient webClient;
+    WebClient.Builder webClientBuilder;
 
     public void placeOrder(OrderRequest orderRequest){
         Order order = new Order();
@@ -36,16 +36,24 @@ public class OrderService {
                                         .map(this::mapToOrderLineItem)
                                         .collect(Collectors.toList());
         order.setOrderLineItemsList(olilist);   
-
-        //Call inventory service to check if items are in stock. Only then place the order
+        List<Integer> itemsQuantities = orderRequest
+                                        .getOrderLineItemsDtoList()
+                                        .stream()
+                                        .map(item -> item.getQuantity())
+                                        .collect(Collectors.toList());
+        //Call inventory service to check if items are in stock. Only then, place the order
         List<String> skuCodes = olilist
                                     .stream()
                                     .map(OrderLineItems::getSkuCode)
                                     .collect(Collectors.toList());
         System.out.println(skuCodes);
-        InventoryResponse[] inventoryResponsesArray = webClient
+        InventoryResponse[] inventoryResponsesArray = webClientBuilder.build()
                         .get()
-                        .uri("http://localhost:8083/api/inventory", uriBuilder -> uriBuilder.queryParam("skuCodeList", skuCodes).build())
+                        .uri("http://inventory-service/api/inventory", uriBuilder -> uriBuilder
+                                                        .queryParam("skuCodeList", skuCodes)
+                                                        .queryParam("quantityList", itemsQuantities)
+                                                        .build() 
+                        )
                         .retrieve()
                         .bodyToMono(InventoryResponse[].class)
                         .block();

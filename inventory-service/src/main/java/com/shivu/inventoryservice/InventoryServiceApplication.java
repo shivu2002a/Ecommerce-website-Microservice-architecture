@@ -1,8 +1,13 @@
 package com.shivu.inventoryservice;
 
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.context.annotation.Bean;
+
+import com.shivu.inventoryservice.model.Inventory;
+import com.shivu.inventoryservice.repository.InventoryRepository;
 
 @SpringBootApplication
 @EnableEurekaClient
@@ -12,7 +17,7 @@ public class InventoryServiceApplication {
 		SpringApplication.run(InventoryServiceApplication.class, args);
 	}
 
-	/* 
+	/*
 	@Bean
 	public CommandLineRunner loadData(InventoryRepository invRepo){
 		return args -> {
@@ -33,5 +38,5 @@ public class InventoryServiceApplication {
 			invRepo.save(inv3);
 		};
 	}
-	*/
+	 */
 }

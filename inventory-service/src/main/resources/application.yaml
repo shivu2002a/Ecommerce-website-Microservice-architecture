@@ -7,13 +7,14 @@ spring:
         driverClassName: org.h2.Driver
         username: sa
         password:
- 
     jpa.database-platform: org.hibernate.dialect.H2Dialect
     jpa.hibernate.ddl-auto: update
-
     output.ansi.enabled: always
 
 server.port: 8083
+# This will enable OS to provide a random Non-busy port to the application
+# server.port: 0
+
 
 # Eureka server address 
 eureka:

@@ -1,7 +1,7 @@
 package com.shivu.inventoryservice.service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,22 +21,25 @@ public class InventoryService {
     InventoryRepository invRepo;
 
     @Transactional(readOnly = true)
-    public List<InventoryResponse> isInStock(List<String> skuCode){
+    public List<InventoryResponse> isInStock(List<String> skuCode, List<Integer> quantityList){
         List<Inventory> isInStock = invRepo.findBySkuCodeIn(skuCode);
-        log.info("Skucode list -> {}", skuCode);
+        log.info("Skucode list -> {}", skuCode);        
+        log.info("Quantity list -> {}", quantityList);
+
         log.info("IsInStock list -> {}", isInStock);
-        List<InventoryResponse> inventoryRespList = isInStock
-            .stream()
-            .map(this::mapToInventoryResponse)
-            .collect(Collectors.toList());
+        List<InventoryResponse> inventoryRespList = new ArrayList<>();
+        for (int i = 0; i < isInStock.size(); i++) {
+            inventoryRespList.add(mapToInventoryResponse(isInStock.get(i), quantityList.get(i)));
+
+        }
         return inventoryRespList;
     }
 
-    public InventoryResponse mapToInventoryResponse(Inventory inv){
+    public InventoryResponse mapToInventoryResponse(Inventory inv, Integer quantity){
         return InventoryResponse
             .builder()
             .skuCode(inv.getSkuCode())
-            .isInStock(inv.getQuantity() > 0)
+            .isInStock(inv.getQuantity() > 0 && inv.getQuantity() >= quantity)
             .build();
     }
 }

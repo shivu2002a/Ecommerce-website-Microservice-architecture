@@ -1,9 +1,8 @@
 eureka:
     instance.hostname: localhost
     client:
-        # By default, these will be true
         register-with-eureka: false
         fetch-registry: false
 
-#Default value
+spring.output.ansi.enabled: always
 server.port: 8761

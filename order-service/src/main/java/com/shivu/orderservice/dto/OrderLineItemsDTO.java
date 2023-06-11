@@ -12,5 +12,5 @@ public class OrderLineItemsDTO {
     private Long id ;
     private String skuCode;
     private Float price; 
-    private Integer quantity; 
+    private Integer quantity;
 }
