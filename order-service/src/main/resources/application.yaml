@@ -1,4 +1,4 @@
-
+# Datasource properties
 spring:
     application.name: order-service
     h2.console.enabled: true
@@ -38,3 +38,6 @@ resilience4j.circuitbreaker.instances.inventory:
     waitDurationInOpenState: 5s
     permittedNumberOfCallsInHalfOpenState: 3
     automaticTransitionFromOpenToHalfOpenEnabled: true
+
+# resilience4J timeout exception
+resilience4j.timelimiter.instances.inventory.timeout-duration: 3s
