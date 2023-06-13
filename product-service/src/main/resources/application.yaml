@@ -5,6 +5,8 @@ spring:
         mongodb:
             uri: mongodb+srv://shivua1945:fN6TcbSCBOFml4D4@microservice.mz6t4i7.mongodb.net/Microservice?retryWrites=true&w=majority
             database: Microservice
+    zipkin.base-url: http://localhost:9411
+    sleuth.sampler.probability: 1.0
 
 eureka.instance:
     prefer-ip-address: true
@@ -19,3 +21,5 @@ server.port: 8081
 eureka:
     client:
         serviceUrl.defaultZone: http://localhost:8761/eureka 
+
+    

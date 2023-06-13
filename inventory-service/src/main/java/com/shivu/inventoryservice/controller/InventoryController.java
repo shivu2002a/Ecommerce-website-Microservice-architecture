@@ -20,7 +20,7 @@ public class InventoryController {
     @Autowired
     InventoryService inventoryService;
 
-    // http://localhost:8083/api/inventory?skuCode=Samsung_M21,MotoRola_G3&quantityList=2,1
+    // http://localhost:8083/api/inventory?skuCodeList=Samsung_M21,MotoRola_G3&quantityList=2,1
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<InventoryResponse> isInStock(@RequestParam List<String> skuCodeList, @RequestParam List<Integer> quantityList) {

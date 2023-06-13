@@ -6,6 +6,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.sleuth.Span;
+import org.springframework.cloud.sleuth.Tracer;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -17,8 +19,11 @@ import com.shivu.orderservice.model.Order;
 import com.shivu.orderservice.model.OrderLineItems;
 import com.shivu.orderservice.repository.OrderRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class OrderService {
     
     @Autowired
@@ -26,6 +31,8 @@ public class OrderService {
 
     @Autowired
     WebClient.Builder webClientBuilder;
+
+    private final Tracer tracer;
 
     public String placeOrder(OrderRequest orderRequest){
         Order order = new Order();
@@ -46,28 +53,55 @@ public class OrderService {
                                     .stream()
                                     .map(OrderLineItems::getSkuCode)
                                     .collect(Collectors.toList());
-        System.out.println(skuCodes);
-        InventoryResponse[] inventoryResponsesArray = webClientBuilder.build()
+        
+        //  Build the traceId
+        Span inventoryServiceRequestTrace = tracer.nextSpan().name("InventoryServiceRequest");
+        try(Tracer.SpanInScope spanInScope = tracer.withSpan(inventoryServiceRequestTrace.start())) {
+            InventoryResponse[] inventoryResponsesArray = webClientBuilder.build()
                         .get()
                         .uri("http://inventory-service/api/inventory", uriBuilder -> uriBuilder
-                                                        .queryParam("skuCodeList", skuCodes)
-                                                        .queryParam("quantityList", itemsQuantities)
-                                                        .build() 
-                        )
+                            .queryParam("skuCodeList", skuCodes)
+                            .queryParam("quantityList", itemsQuantities)
+                            .build())
                         .retrieve()
                         .bodyToMono(InventoryResponse[].class)
                         .block();
 
-        boolean allInStock = Arrays
+            boolean allInStock = Arrays
                             .stream(inventoryResponsesArray)
                             .allMatch(InventoryResponse::isInStock);
 
-        if(allInStock){
-            orderRepo.save(order); 
-            return "Order placed successfully !!";
-        } else {
-            throw new IllegalArgumentException("Product is not in stock !!");
+            if(allInStock){
+                orderRepo.save(order); 
+                return "Order placed successfully !!";
+            } else {
+                throw new IllegalArgumentException("Product is not in stock !!");
+            }
+        } finally {
+            inventoryServiceRequestTrace.end();
         }
+        
+        // InventoryResponse[] inventoryResponsesArray = webClientBuilder.build()
+        //                 .get()
+        //                 .uri("http://inventory-service/api/inventory", uriBuilder -> uriBuilder
+        //                                                 .queryParam("skuCodeList", skuCodes)
+        //                                                 .queryParam("quantityList", itemsQuantities)
+        //                                                 .build() 
+        //                 )
+        //                 .retrieve()
+        //                 .bodyToMono(InventoryResponse[].class)
+        //                 .block();
+
+        // boolean allInStock = Arrays
+        //                     .stream(inventoryResponsesArray)
+        //                     .allMatch(InventoryResponse::isInStock);
+
+        // if(allInStock){
+        //     orderRepo.save(order); 
+        //     return "Order placed successfully !!";
+        // } else {
+        //     throw new IllegalArgumentException("Product is not in stock !!");
+        // }
     }
     
 
