@@ -15,6 +15,9 @@ server.port: 8083
 # This will enable OS to provide a random Non-busy port to the application
 # server.port: 0
 
+eureka.instance:
+    prefer-ip-address: true
+    hostname: localhost
 
 # Eureka server address 
 eureka:

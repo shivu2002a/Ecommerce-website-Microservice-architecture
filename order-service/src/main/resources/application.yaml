@@ -13,7 +13,28 @@ spring:
 
 server.port: 8082
 
+eureka.instance:
+    prefer-ip-address: true
+    hostname: localhost
+
 # Eureka server address 
 eureka:
     client:
         serviceUrl.defaultZone: http://localhost:8761/eureka 
+
+# Actuator properties
+management:
+    health.circuitbreakers.enabled: true
+    endpoints.web.exposure.include: '*'
+    endpoint.health.show-details: always
+
+# Resilience4J properties
+resilience4j.circuitbreaker.instances.inventory:
+    registerHealthIndicator: true
+    event-consumer-buffer-size: 10
+    slidingWindowType: COUNT_BASED
+    slidingWindowSize: 5
+    failureRateThreshold: 50
+    waitDurationInOpenState: 5s
+    permittedNumberOfCallsInHalfOpenState: 3
+    automaticTransitionFromOpenToHalfOpenEnabled: true

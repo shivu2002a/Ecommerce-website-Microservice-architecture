@@ -6,6 +6,9 @@ spring:
             uri: mongodb+srv://shivua1945:fN6TcbSCBOFml4D4@microservice.mz6t4i7.mongodb.net/Microservice?retryWrites=true&w=majority
             database: Microservice
 
+eureka.instance:
+    prefer-ip-address: true
+    hostname: localhost
 
 server.port: 8081
 
