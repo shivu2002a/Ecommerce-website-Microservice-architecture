@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.sleuth.Span;
 import org.springframework.cloud.sleuth.Tracer;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -15,6 +16,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.shivu.orderservice.dto.InventoryResponse;
 import com.shivu.orderservice.dto.OrderLineItemsDTO;
 import com.shivu.orderservice.dto.OrderRequest;
+import com.shivu.orderservice.event.OrderPlacedEvent;
 import com.shivu.orderservice.model.Order;
 import com.shivu.orderservice.model.OrderLineItems;
 import com.shivu.orderservice.repository.OrderRepository;
@@ -33,6 +35,10 @@ public class OrderService {
     WebClient.Builder webClientBuilder;
 
     private final Tracer tracer;
+
+    private final KafkaTemplate<String, OrderPlacedEvent> kafkaTemplate;
+
+    private final String NOTIFICATION_TOPIC = "notificationTopic"; 
 
     public String placeOrder(OrderRequest orderRequest){
         Order order = new Order();
@@ -72,7 +78,8 @@ public class OrderService {
                             .allMatch(InventoryResponse::isInStock);
 
             if(allInStock){
-                orderRepo.save(order); 
+                Order savedOrder = orderRepo.save(order); 
+                sendEmailNotification(orderRequest, savedOrder);
                 return "Order placed successfully !!";
             } else {
                 throw new IllegalArgumentException("Product is not in stock !!");
@@ -111,5 +118,18 @@ public class OrderService {
         oli.setQuantity(olidto.getQuantity());
         oli.setSkuCode(olidto.getSkuCode());
         return oli;
+    }
+
+    private void sendEmailNotification(OrderRequest orderRequest, Order savedOrder){
+        // Publish an event for notification
+        OrderPlacedEvent orderPlacedEvent = new OrderPlacedEvent();
+        orderPlacedEvent.setEmail_id(orderRequest.getEmail_id());        
+        orderPlacedEvent.setOrderNumber(savedOrder.getOrdernumber());
+        orderPlacedEvent.setTotalPrice(orderRequest
+                                    .getOrderLineItemsDtoList()
+                                    .stream()
+                                    .mapToDouble(item -> item.getPrice() * item.getQuantity())
+                                    .sum());
+        kafkaTemplate.send(NOTIFICATION_TOPIC, orderPlacedEvent);
     }
 }

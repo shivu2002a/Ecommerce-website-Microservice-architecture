@@ -45,7 +45,16 @@ resilience4j.circuitbreaker.instances.inventory:
 resilience4j.timelimiter.instances.inventory.timeout-duration: 10s
 
 # resilience4J Retry properties
-resilience4J.retry.instances.inventory.max-attempts: 3
-resilience4J.retry.instances.inventory.max-duration: 10s
+resilience4J.retry.instances.inventory:
+    max-attempts: 3
+    max-duration: 10s
+
+#Kafka configuration
+spring.kafka:
+    bootstrap-servers: localhost:9092
+    template.default-topic: notificationTopic
+    producer.key-serializer: org.apache.kafka.common.serialization.StringSerializer
+    producer.value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
 
     

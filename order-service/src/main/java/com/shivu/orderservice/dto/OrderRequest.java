@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OrderRequest {
     
+    private String email_id;
     private List<OrderLineItemsDTO> orderLineItemsDtoList;
-
 }
