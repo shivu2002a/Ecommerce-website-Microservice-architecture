@@ -55,6 +55,8 @@ spring.kafka:
     template.default-topic: notificationTopic
     producer.key-serializer: org.apache.kafka.common.serialization.StringSerializer
     producer.value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    producer.properties.spring.json.type.mapping: "event:com.shivu.orderservice.event.OrderPlacedEvent"
 
+    
 
     

@@ -22,10 +22,12 @@ import com.shivu.orderservice.model.OrderLineItems;
 import com.shivu.orderservice.repository.OrderRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class OrderService {
     
     @Autowired
@@ -123,7 +125,7 @@ public class OrderService {
     private void sendEmailNotification(OrderRequest orderRequest, Order savedOrder){
         // Publish an event for notification
         OrderPlacedEvent orderPlacedEvent = new OrderPlacedEvent();
-        orderPlacedEvent.setEmail_id(orderRequest.getEmail_id());        
+        // orderPlacedEvent.setEmail_id(orderRequest.getEmail_id());        
         orderPlacedEvent.setOrderNumber(savedOrder.getOrdernumber());
         orderPlacedEvent.setTotalPrice(orderRequest
                                     .getOrderLineItemsDtoList()
@@ -131,5 +133,6 @@ public class OrderService {
                                     .mapToDouble(item -> item.getPrice() * item.getQuantity())
                                     .sum());
         kafkaTemplate.send(NOTIFICATION_TOPIC, orderPlacedEvent);
+        log.info("Published a message for event - Order Placed with id : {}", orderPlacedEvent.getOrderNumber());
     }
 }
