@@ -1,7 +1,7 @@
 
 # Datasource properties
 spring:
-    application.name: order-service
+    application.name: notification-service
     output.ansi.enabled: always
     zipkin.base-url: http://localhost:9411
     sleuth.sampler.probability: 1.0
@@ -23,7 +23,9 @@ spring.kafka:
     template.default-topic: notificationTopic
     consumer.group-id: notificationId
     consumer.key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    consumer.value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-
+    # consumer.value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+    consumer.value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    consumer.properties.spring.json.trusted.packages: '*'
+    consumer.properties.spring.json.type.mapping: "event:com.shiva.notificationservice.event.OrderPlacedEvent"
 
     

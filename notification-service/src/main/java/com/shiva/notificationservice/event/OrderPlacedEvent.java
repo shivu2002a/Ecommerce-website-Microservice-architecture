@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class OrderPlacedEvent {
 
-    private String email_id;
+    // private String email_id;
     private String orderNumber;
     private double totalPrice;
 
