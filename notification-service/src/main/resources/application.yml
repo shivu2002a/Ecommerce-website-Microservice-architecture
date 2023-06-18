@@ -21,11 +21,15 @@ eureka:
 spring.kafka:
     bootstrap-servers: localhost:9092
     template.default-topic: notificationTopic
-    consumer.group-id: notificationId
-    consumer.key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    # consumer.value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-    consumer.value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    consumer.properties.spring.json.trusted.packages: '*'
-    consumer.properties.spring.json.type.mapping: "event:com.shiva.notificationservice.event.OrderPlacedEvent"
+    consumer:
+        group-id: notificationId
+        key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+        #value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+        value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+        properties.spring.json:
+            trusted.packages: '*'
+            type.mapping: "event:com.shiva.notificationservice.event.OrderPlacedEvent"
 
-    
+mailjetclient:
+    apikey_public: #
+    apikey_private: #
