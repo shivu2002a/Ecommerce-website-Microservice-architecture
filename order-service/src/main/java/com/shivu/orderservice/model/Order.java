@@ -27,8 +27,9 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id ;
 
-    private String ordernumber;
-    
+    private String ordernumber;    
+    private String email_id;
+
     @OneToMany(cascade = CascadeType.ALL)
     private List<OrderLineItems> OrderLineItemsList;
 

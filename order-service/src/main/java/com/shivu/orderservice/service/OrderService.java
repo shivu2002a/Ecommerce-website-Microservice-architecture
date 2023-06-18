@@ -50,7 +50,8 @@ public class OrderService {
                                         .stream()
                                         .map(this::mapToOrderLineItem)
                                         .collect(Collectors.toList());
-        order.setOrderLineItemsList(olilist);   
+        order.setOrderLineItemsList(olilist);
+        order.setEmail_id(orderRequest.getEmail_id());  
         List<Integer> itemsQuantities = orderRequest
                                         .getOrderLineItemsDtoList()
                                         .stream()
@@ -126,7 +127,8 @@ public class OrderService {
         // Publish an event for notification
         OrderPlacedEvent orderPlacedEvent = new OrderPlacedEvent();
         // orderPlacedEvent.setEmail_id(orderRequest.getEmail_id());        
-        orderPlacedEvent.setOrderNumber(savedOrder.getOrdernumber());
+        orderPlacedEvent.setOrderNumber(savedOrder.getOrdernumber());        
+        orderPlacedEvent.setEmail_id(savedOrder.getEmail_id());
         orderPlacedEvent.setTotalPrice(orderRequest
                                     .getOrderLineItemsDtoList()
                                     .stream()
