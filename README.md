@@ -8,7 +8,21 @@ This is an E-commerce backend project built on **Microservice** **architecture**
 6. **Resilience4J** for fault tolerance
 7. **MongoDB** and **H3 database**
 
+## Services available: 
+1. **Product-Service** - for fetching list and details of products  
+2. **Order service** - for placing orders. Also publishes messages on Kafka. 
+3. **Inventory service** - for checking if the specified product exists or not
+4. **Notification service** - A message will be published in the Kafka topic upon confirmation of an order. This service consumes that message and sends an email to the user mail with order details. 
 
+## Setting up in local:
+1. Java 11 environment
+2. You need to have Kafka. It can be installed by running the docker-compose in the project root folder by `docker compose up -d`. </br>
+   Docker must be running in order to run docker scripts.
+3. Mailjet account for api-keys
+4. To run the whole application - in the root folder, run `./mvnw install && ./mvnw spring-boot:run -pl application` (quick and easy). </br>
+   If you have maven installed, run `mvn build && java -jar target/app.jar` which is th mostly used way of building spring applications. </br>
+   </br>
+   Now all the applications must be up. You can check the application ports in respective _application.yml_ file.
    
 
 
