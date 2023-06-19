@@ -1,6 +1,7 @@
 package com.shivu.productservice.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,5 +44,13 @@ public class ProductService {
                                 .name(product.getName())
                                 .price(product.getPrice())
                                 .build();
+    }
+
+    public ProductResponse getProductById(String id) {
+        Optional<Product> optionalProd = productRepo.findById(id);
+        if(optionalProd.isPresent()){
+            return maptoProductResponse(optionalProd.get());
+        }
+        return null;
     }
 }
