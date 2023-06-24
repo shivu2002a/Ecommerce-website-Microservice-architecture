@@ -25,3 +25,16 @@ eureka.instance:
 eureka:
     client:
         serviceUrl.defaultZone: http://localhost:8761/eureka 
+
+#Kafka configuration
+spring.kafka:
+    bootstrap-servers: localhost:9092
+    template.default-topic: notificationTopic
+    consumer:
+        group-id: notificationId
+        key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+        #value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+        value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+        properties.spring.json:
+            trusted.packages: '*'
+            type.mapping: "event:com.shiva.notificationservice.event.OrderPlacedEvent"

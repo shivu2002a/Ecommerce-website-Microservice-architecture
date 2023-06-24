@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
+import org.springframework.kafka.support.converter.StringJsonMessageConverter;
 
 import com.shivu.inventoryservice.model.Inventory;
 import com.shivu.inventoryservice.repository.InventoryRepository;
@@ -16,6 +17,11 @@ public class InventoryServiceApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(InventoryServiceApplication.class, args);
 	}
+
+	@Bean
+    public StringJsonMessageConverter jsonConverter() {
+        return new StringJsonMessageConverter();
+    }
 
 	/*
 	@Bean

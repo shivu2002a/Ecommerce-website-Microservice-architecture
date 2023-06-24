@@ -2,12 +2,15 @@ package com.shivu.inventoryservice.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.shivu.inventoryservice.dto.InventoryResponse;
+import com.shivu.inventoryservice.event.OrderLineItems;
+import com.shivu.inventoryservice.event.OrderPlacedEvent;
 import com.shivu.inventoryservice.model.Inventory;
 import com.shivu.inventoryservice.repository.InventoryRepository;
 
@@ -42,4 +45,17 @@ public class InventoryService {
             .isInStock(inv.getQuantity() > 0 && inv.getQuantity() >= quantity)
             .build();
     }
+
+    public void updateInventory(OrderPlacedEvent orderPlacedEvent) {
+        List<OrderLineItems> orderLineItemsList = orderPlacedEvent.getOrderLineItemsList();
+        orderLineItemsList.forEach(p -> updateItem(p));
+    }
+
+    private void updateItem(OrderLineItems item) {
+        Inventory repoItem = invRepo.findBySkuCode(item.getSkuCode()).get();
+        repoItem.setQuantity(repoItem.getQuantity() - item.getQuantity());
+        invRepo.save(repoItem);
+    }
+
+    
 }
