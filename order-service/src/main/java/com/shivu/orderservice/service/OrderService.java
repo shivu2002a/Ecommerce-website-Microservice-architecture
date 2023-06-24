@@ -82,7 +82,7 @@ public class OrderService {
 
             if(allInStock){
                 Order savedOrder = orderRepo.save(order); 
-                sendEmailNotification(orderRequest, savedOrder);
+                sendNotification(orderRequest, savedOrder);
                 return "Order placed successfully !!";
             } else {
                 throw new IllegalArgumentException("Product is not in stock !!");
@@ -123,10 +123,11 @@ public class OrderService {
         return oli;
     }
 
-    private void sendEmailNotification(OrderRequest orderRequest, Order savedOrder){
+    private void sendNotification(OrderRequest orderRequest, Order savedOrder){
         // Publish an event for notification
         OrderPlacedEvent orderPlacedEvent = new OrderPlacedEvent();
-        // orderPlacedEvent.setEmail_id(orderRequest.getEmail_id());        
+        orderPlacedEvent.setEmail_id(orderRequest.getEmail_id());    
+        orderPlacedEvent.setOrderLineItemsList(savedOrder.getOrderLineItemsList());   
         orderPlacedEvent.setOrderNumber(savedOrder.getOrdernumber());        
         orderPlacedEvent.setEmail_id(savedOrder.getEmail_id());
         orderPlacedEvent.setTotalPrice(orderRequest
