@@ -7,6 +7,9 @@ This is an E-commerce backend project built on **Microservice** **architecture**
 5. **Zipkin** for distributed tracing of requests
 6. **Resilience4J** for fault tolerance
 7. **MongoDB** and **H3 database**
+   
+## Architecture diagram:
+![](https://github.com/shivu2002a/Ecommerce-website-Microservice-architecture/blob/main/Ecom-ms-architecture.jpg)
 
 ## Services available: 
 1. **Product-Service** - for fetching list and details of products  
@@ -20,7 +23,7 @@ This is an E-commerce backend project built on **Microservice** **architecture**
    Docker must be running in order to run docker scripts.
 3. Mailjet account for api-keys
 4. To run the whole application - in the root folder, run `./mvnw install && ./mvnw spring-boot:run -pl application` (quick and easy). </br>
-   If you have maven installed, run `mvn build && java -jar target/app.jar` which is th mostly used way of building spring applications. </br>
+   If you have maven installed, run `mvn build && java -jar target/the-package-name.jar` which is th mostly used way of building spring applications. </br>
    </br>
    Now all the applications must be up. You can check the application ports in respective _application.yml_ file.
    
